@@ -2,6 +2,7 @@ import ollama
 import chrombadb
 from sentence_transformers import SentenceTransformer
 import redis
+from redis.commands.search.query import Query
 
 # Embedding Models
 embedding_models = {"MiniLM": SentenceTransformer("all-MiniLM-L6-v2"), 
