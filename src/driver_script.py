@@ -1,4 +1,4 @@
-
+import ollama
 import chrombadb
 
 # Embedding Models
