@@ -20,8 +20,14 @@ INDEX_NAME = "embedding_index"
 chroma_client = chromadb.PersistentClient(path="./chroma_db")
 collection = chroma_client.get_or_create_collection(name="test_collection")
 
-CHUNK_SIZES = {200, 500, 1000}
-CHUNK_OVERLAPS = {0, 50, 100}
+CHUNK_SIZES = [200, 500, 1000]
+CHUNK_OVERLAPS = [0, 50, 100]
+
+llms = ["mistral:latest", "llama2:7b"]
+
+# memory function  
+def get_memory_usage():
+    return psutil.Process().memory_info().rss / (1024 * 1024)
 
 '''
 for model in embedding_models:
