@@ -16,6 +16,7 @@ INDEX_NAME = "embedding_index"
 chroma_client = chromadb.PersistentClient(path="./chroma_db")
 collection = chroma_client.get_or_create_collection(name="test_collection")
 
-CHUNK_SIZES = {200, 500, 1000}
-CHUNK_OVERLAPS = {0, 50, 100}
-
+chunks = {
+    "sizes": [200, 500, 1000],   
+    "overlaps": [0, 50, 100]    
+}
