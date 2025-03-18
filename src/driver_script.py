@@ -34,6 +34,13 @@ def run_experiment(model_name, db_type, llm, chunk_size, chunk_overlap):
 
     start_time = time.time()
     start_memory = get_memory_usage()
+    subprocess.run(["python", "ingest.py"])  # Run ingestion script
+
+    end_memory = get_memory_usage()
+    end_time = time.time()
+
+    elapsed_time = end_time - start_time
+    memory_used = end_memory - start_memory
 
 
 
