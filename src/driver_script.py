@@ -25,6 +25,8 @@ CHUNK_OVERLAPS = [0, 50, 100]
 
 llms = ["mistral:latest", "llama2:7b"]
 
+file = "performance.csv"
+
 # memory function  
 def get_memory_usage():
     return psutil.Process().memory_info().rss / (1024 * 1024)
@@ -50,7 +52,18 @@ def run_experiment(model_name, db_type, llm, chunk_size, chunk_overlap):
         "Time (s)": elapsed_time,
         "Memory (MB)": memory_used
     }
+results = []
+for model in embedding_models:
+    for db in ["Redis", "Chroma"]:
+        for llm in llms:
+            for size in CHUNK_SIZES:
+                for overlap in CHUNK_OVERLAPS:
+                    result = run_experiment(model, db, llm, size, overlap)
+                    results.append(result)
 
+
+df = pd.DataFrame(results)
+df.to_csv(file, index=False)
 
 '''
 for model in embedding_models:
