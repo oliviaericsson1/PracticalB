@@ -29,6 +29,15 @@ llms = ["mistral:latest", "llama2:7b"]
 def get_memory_usage():
     return psutil.Process().memory_info().rss / (1024 * 1024)
 
+def run_experiment(model_name, db_type, llm, chunk_size, chunk_overlap):
+    print(f"\nRunning Experiment: Model={model_name}, DB={db_type}, LLM={llm}, Chunk Size={chunk_size}, Overlap={chunk_overlap}")
+
+    start_time = time.time()
+    start_memory = get_memory_usage()
+
+
+
+
 '''
 for model in embedding_models:
   for db in dbs:
