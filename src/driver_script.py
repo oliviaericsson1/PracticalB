@@ -41,8 +41,15 @@ def run_experiment(model_name, db_type, llm, chunk_size, chunk_overlap):
 
     elapsed_time = end_time - start_time
     memory_used = end_memory - start_memory
-
-
+    return {
+        "Embedding Model": model_name,
+        "Vector DB": db_type,
+        "LLM": llm,
+        "Chunk Size": chunk_size,
+        "Chunk Overlap": chunk_overlap,
+        "Time (s)": elapsed_time,
+        "Memory (MB)": memory_used
+    }
 
 
 '''
