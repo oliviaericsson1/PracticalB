@@ -1,5 +1,6 @@
 import ollama
 import chrombadb
+from sentence_transformers import SentenceTransformer
 
 # Embedding Models
 embedding_models = {"MiniLM": SentenceTransformer("all-MiniLM-L6-v2"), 
