@@ -1,6 +1,7 @@
 import ollama
 import chrombadb
 from sentence_transformers import SentenceTransformer
+import redis
 
 # Embedding Models
 embedding_models = {"MiniLM": SentenceTransformer("all-MiniLM-L6-v2"), 
