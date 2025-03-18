@@ -47,7 +47,7 @@ CHUNK_OVERLAPS = {0, 50, 100}
 for model in embedding_models:
   for db in dbs:
     for llm in llms:
-      for batch_size in batches:
+      for size in chunk_sizes:
         # add in ingest functions as necessary
         # add in search as necessary with model, db, llm inputs
         # Store time and memory data and append it to some csv
