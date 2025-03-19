@@ -99,27 +99,26 @@ def split_text_into_chunks(text, chunk_size=300, overlap=50):
 
     return chunks
 
-
-# Process all PDF files in a given directory
 def process_pdfs(data_dir):
-    """Process PDFs and store embeddings in Redis."""
+
     for file_name in os.listdir(data_dir):
         if file_name.endswith(".pdf"):
             pdf_path = os.path.join(data_dir, file_name)
             text_by_page = extract_text_from_pdf(pdf_path)
-
             for page_num, text in text_by_page:
                 chunks = split_text_into_chunks(text)
-                for chunk in chunks:
+                # print(f"  Chunks: {chunks}")
+                for chunk_index, chunk in enumerate(chunks):
+                    # embedding = calculate_embedding(chunk)
                     embedding = get_embedding(chunk)
                     store_embedding(
                         file=file_name,
                         page=str(page_num),
+                        # chunk=str(chunk_index),
                         chunk=str(chunk),
                         embedding=embedding,
                     )
-
-            print(f"Processed {file_name}")
+            print(f" -----> Processed {file_name}")
 
 
 def query_redis(query_text: str):
