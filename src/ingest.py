@@ -48,7 +48,6 @@ def get_embedding(text: str, model: str = "nomic-embed-text") -> list:
     return response["embedding"]
 
 
-# Store the embedding in Redis
 def store_embedding(file: str, page: str, chunk: str, embedding: list):
     key = f"{DOC_PREFIX}:{file}_page_{page}_chunk_{chunk}"
     redis_client.hset(
@@ -57,10 +56,12 @@ def store_embedding(file: str, page: str, chunk: str, embedding: list):
             "file": file,
             "page": page,
             "chunk": chunk,
-            "embedding": np.array(embedding, dtype=np.float32).tobytes(),  # Store as byte array
+            "embedding": np.array(
+                embedding, dtype=np.float32
+            ).tobytes(),  # Store as byte array
         },
     )
-    print(f"Stored embedding for: {chunk[:50]}...")
+    print(f"Stored embedding for: {chunk}")
 
 
 # Text Preprocessing Function
