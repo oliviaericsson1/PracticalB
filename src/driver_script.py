@@ -31,7 +31,9 @@ def measure_time_and_memory(test_query):
     tracemalloc.start() 
     start_time = time.perf_counter()
 
-    search.search_embeddings(test_query)
+    context_results = search.search_embeddings(test_query)
+
+    search.generate_rag_response(test_query, context_results)
 
     end_time = time.perf_counter()
     current, peak = tracemalloc.get_traced_memory() 
@@ -45,7 +47,6 @@ def measure_time_and_memory(test_query):
 
 def create_test_results():
     results = []
-
     for model_name, model in embedding_models.items():
         for db_name, db_client in vector_dbs.items():
             for size in chunk_sizes:
