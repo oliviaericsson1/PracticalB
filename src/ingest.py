@@ -6,8 +6,6 @@ import numpy as np
 from redis.commands.search.query import Query
 import os
 import fitz
-import re
-import string
 
 # Initialize Redis connection
 redis_client = redis.Redis(host="localhost", port=6379, db=0)
@@ -18,7 +16,7 @@ DOC_PREFIX = "doc:"
 DISTANCE_METRIC = "COSINE"
 
 
-# Used to clear the Redis vector store
+# used to clear the redis vector store
 def clear_redis_store():
     print("Clearing existing Redis store...")
     redis_client.flushdb()
@@ -44,10 +42,12 @@ def create_hnsw_index():
 
 # Generate an embedding using nomic-embed-text
 def get_embedding(text: str, model: str = "nomic-embed-text") -> list:
+
     response = ollama.embeddings(model=model, prompt=text)
     return response["embedding"]
 
 
+# store the embedding in Redis
 def store_embedding(file: str, page: str, chunk: str, embedding: list):
     key = f"{DOC_PREFIX}:{file}_page_{page}_chunk_{chunk}"
     redis_client.hset(
@@ -64,31 +64,17 @@ def store_embedding(file: str, page: str, chunk: str, embedding: list):
     print(f"Stored embedding for: {chunk}")
 
 
-# Text Preprocessing Function
-def preprocess_text(text):
-    """Clean text by removing whitespace, punctuation, and non-alphabetic characters."""
-    text = text.lower()  # Convert to lowercase
-    text = re.sub(r'\s+', ' ', text)  # Remove extra whitespace
-    text = text.translate(str.maketrans('', '', string.punctuation))  # Remove punctuation
-    text = re.sub(r'[^a-z\s]', '', text)  # Remove non-alphabetic characters
-    return text.strip()
-
-
-# Extract text from a PDF by page
+# extract the text from a PDF by page
 def extract_text_from_pdf(pdf_path):
-    """Extract text from a PDF file and clean it."""
+    """Extract text from a PDF file."""
     doc = fitz.open(pdf_path)
     text_by_page = []
-
     for page_num, page in enumerate(doc):
-        raw_text = page.get_text()
-        cleaned_text = preprocess_text(raw_text)  # Apply text preprocessing
-        text_by_page.append((page_num, cleaned_text))
-
+        text_by_page.append((page_num, page.get_text()))
     return text_by_page
 
 
-# Split the text into chunks with overlap
+# split the text into chunks with overlap
 def split_text_into_chunks(text, chunk_size=300, overlap=50):
     """Split text into chunks of approximately chunk_size words with overlap."""
     words = text.split()
@@ -96,9 +82,10 @@ def split_text_into_chunks(text, chunk_size=300, overlap=50):
     for i in range(0, len(words), chunk_size - overlap):
         chunk = " ".join(words[i : i + chunk_size])
         chunks.append(chunk)
-
     return chunks
 
+
+# Process all PDF files in a given directory
 def process_pdfs(data_dir):
 
     for file_name in os.listdir(data_dir):
@@ -122,18 +109,18 @@ def process_pdfs(data_dir):
 
 
 def query_redis(query_text: str):
-    """Query Redis for similar embeddings."""
     q = (
         Query("*=>[KNN 5 @embedding $vec AS vector_distance]")
         .sort_by("vector_distance")
         .return_fields("id", "vector_distance")
         .dialect(2)
     )
-
+    query_text = "Efficient search in vector databases"
     embedding = get_embedding(query_text)
     res = redis_client.ft(INDEX_NAME).search(
         q, query_params={"vec": np.array(embedding, dtype=np.float32).tobytes()}
     )
+    # print(res.docs)
 
     for doc in res.docs:
         print(f"{doc.id} \n ----> {doc.vector_distance}\n")
@@ -145,7 +132,6 @@ def main():
 
     process_pdfs("../data/")
     print("\n---Done processing PDFs---\n")
-
     query_redis("What is the capital of France?")
 
 
