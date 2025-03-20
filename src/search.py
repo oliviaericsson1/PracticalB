@@ -10,8 +10,7 @@ from redis.commands.search.field import VectorField, TextField
 # Initialize models
 # embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 redis_client = redis.StrictRedis(host="localhost", port=6379, decode_responses=True)
-
-VECTOR_DIM = 768
+VECTOR_DIM = 384
 INDEX_NAME = "embedding_index"
 DOC_PREFIX = "doc:"
 DISTANCE_METRIC = "COSINE"
@@ -21,15 +20,20 @@ DISTANCE_METRIC = "COSINE"
 #     return np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
 
 
-def get_embedding(text: str, model: str = "nomic-embed-text") -> list:
+def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
+    if use_llama == True:
+        response = ollama.embeddings(model=model, prompt=text)
+        response["embedding"]
+    else: 
+        sentence_transformer = SentenceTransformer(model)
+        response = sentence_transformer.encode(text).tolist()
+        return response
 
-    response = ollama.embeddings(model=model, prompt=text)
-    return response["embedding"]
 
 
-def search_embeddings(query, top_k=3):
+def search_embeddings(query, model, top_k=3):
 
-    query_embedding = get_embedding(query)
+    query_embedding = get_embedding(query, model)
 
     # Convert embedding to bytes for Redis search
     query_vector = np.array(query_embedding, dtype=np.float32).tobytes()
@@ -120,7 +124,7 @@ def interactive_search():
             break
 
         # Search for relevant embeddings
-        context_results = search_embeddings(query)
+        context_results = search_embeddings(query, "hkunlp/instructor-xl")
 
         # Generate RAG response
         response = generate_rag_response(query, "llama2:7b", context_results)
@@ -154,4 +158,5 @@ def interactive_search():
 if __name__ == "__main__":
     print("Running search")
     interactive_search()
+
 
