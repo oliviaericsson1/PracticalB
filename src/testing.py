@@ -14,9 +14,9 @@ from tqdm import tqdm
 
 # Embedding Models
 embedding_models = {
-    "MiniLM": SentenceTransformer("all-MiniLM-L6-v2"),
-    "MPNet": SentenceTransformer("sentence-transformers/all-mpnet-base-v2"),
-    "InstructorXL": SentenceTransformer("hkunlp/instructor-xl"),
+    "MiniLM": "all-MiniLM-L6-v2",
+    "MPNet": "all-mpnet-base-v2",
+    "InstructorXL": "hkunlp/instructor-xl"
 }
 
 llms = {"Mistral": "mistral:latest", "Llama": "llama2:7b"}
@@ -33,11 +33,11 @@ test_queries = ["What is an AVL tree?", "When are Professor Fontenot's Office Ho
 csv_path = "./test_data.csv" 
 
 
-def measure_time_and_memory(test_query, llm):
+def measure_time_and_memory(test_query, embed_model, llm):
     tracemalloc.start() 
     start_time = time.perf_counter()
 
-    context_results = search.search_embeddings(test_query)
+    context_results = search.search_embeddings(test_query, embed_model)
 
     response = search.generate_rag_response(test_query, llm, context_results)
 
@@ -56,12 +56,12 @@ def create_test_results():
     total_combinations = len(llms) * len(embedding_models) * len(vector_dbs) * len(chunk_sizes) * len(test_queries) * len(chunk_overlaps)
     with tqdm(total=total_combinations, desc="Processing Combos") as pbar:
         for llm_name, llm in llms.items(): 
-            for model_name, model in embedding_models.items():
+            for model_name, embed_model in embedding_models.items():
                 for db_name, db_client in vector_dbs.items():
                     for size in chunk_sizes:
                         for query in test_queries:
                             for overlap in chunk_overlaps: 
-                                query_time, query_memory, response = measure_time_and_memory(query, llm)
+                                query_time, query_memory, response = measure_time_and_memory(query, embed_model, llm)
                                 results.append([model_name, db_name, size, overlap, query_time, query_memory, response, llm_name])
                                 pbar.update(1)
     df = pd.DataFrame(results, columns=[
@@ -73,7 +73,3 @@ def create_test_results():
 
 
 create_test_results()
-
-
-
-
