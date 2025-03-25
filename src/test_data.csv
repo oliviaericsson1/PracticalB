@@ -1,0 +1,112 @@
+embedding_model,Vector_DB,chunk_size,chunk_overlap,query_time,query_memory,response,llm
+Nomic-Embed,Redis,1000,50,40.79340574999969,0.11165332794189453,"I apologize, but I cannot provide you with Professor Fontenot's office hours as I am a text-based AI assistant and do not have access to the schedules of individual professors. Office hours are typically scheduled by the professor themselves and may vary depending on their availability and other factors. The best way to find out about Professor Fontenot's office hours is to consult with him directly or check the course schedule for his class. I hope this helps! Let me know if you have any other questions.",Llama
+Nomic-Embed,Redis,1000,100,50.65287999999964,0.10284233093261719," In Java, you can create a HashMap (Hash Table) using the HashMap class. Here's an example of how to create and use a HashMap:
+
+```java
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Map<String, Integer> myHashMap = new HashMap<>();
+
+        // Add elements to the map
+        myHashMap.put(""Apple"", 1);
+        myHashMap.put(""Banana"", 2);
+        myHashMap.put(""Cherry"", 3);
+
+        // Access an element by its key
+        System.out.println(myHashMap.get(""Apple"")); // Output: 1
+
+        // Check if a key exists in the map
+        System.out.println(myHashMap.containsKey(""Orange"")); // Output: false
+
+        // Iterate through all keys and values
+        for (Map.Entry<String, Integer> entry : myHashMap.entrySet()) {
+            System.out.println(""Key: "" + entry.getKey() + "", Value: "" + entry.getValue());
+        }
+    }
+}
+```
+
+In this example, we first import the HashMap class from the java.util package. Then, we create a new empty HashMap named myHashMap and use its put method to add key-value pairs. To access an element by its key, you can use the get method. You can also check if a key exists in the map using the containsKey method, and iterate through all keys and values using a for-each loop (entrySet() method).",Mistral
+MiniLM,Redis,200,0,26.455848166999658,5.528571128845215," I don't have real-time information or specific details about Professor Fontenot's office hours. You should refer to the course syllabus, university website, or contact the department of your institution for accurate and up-to-date information regarding Professor Fontenot's office hours.",Mistral
+Nomic-Embed,Redis,1000,100,65.44518716599987,0.10289478302001953,"In computing, a hash map is a data structure that maps keys to values using a hash function. The hash function takes the key as input and produces an index or key as output, which is used to look up the corresponding value in the map. Here's one way to create a simple hash map:
+
+1. Define a class that represents the hash map, with fields for the keys and values. For example:
+```
+class HashMap {
+  private Map<Integer, String> map;
+
+  public HashMap() {
+    map = new HashMap<>();
+  }
+
+  public void put(int key, String value) {
+    map.put(key, value);
+  }
+
+  public String get(int key) {
+    return map.get(key);
+  }
+}
+```
+2. Create an instance of the hash map class and use it to store key-value pairs. For example:
+```
+HashMap map = new HashMap();
+map.put(1, ""one"");
+map.put(2, ""two"");
+map.put(3, ""three"");
+```
+Now you have a simple hash map that can be used to store and retrieve key-value pairs. Of course, this is just one way to create a hash map, and there are many other ways to implement it depending on your specific requirements.
+
+I hope this helps! Let me know if you have any questions or need further clarification.",Llama
+Nomic-Embed,Chroma,200,0,22.15427812500002,0.16300487518310547," An AVL (Adelson-Velsky and Landis) tree is a self-balancing binary search tree. It was designed to solve problems with regular balanced binary search trees, such as the Binary Search Tree, where balance could be lost during insertion or deletion operations. In an AVL tree, the height difference between the two child subtrees of any node must always be within 1. If this condition is violated, the tree is rebalanced by performing rotations on the affected nodes. This ensures that the search time complexity remains O(log n) for best- and worst-case scenarios.",Mistral
+MiniLM,Chroma,1000,100,27.910174624999854,5.517587661743164," I don't have real-time data or personal information about individuals like Professor Fontenot. To find out when his office hours are, I recommend checking the syllabus for the course he is teaching or contacting the department in which he works directly. You can usually find this information on a university's website.",Mistral
+Nomic-Embed,Chroma,200,50,22.7729551249995,0.1488323211669922," An AVL (Adelson-Velsky and Landis) tree is a self-balancing binary search tree, which was named after its inventors George Adelson-Velsky and Evgenii Landis. It helps maintain the height of the tree close to logarithmic order by adjusting the balance factor after insertion, deletion, or rotation operations. This property guarantees that the worst-case scenario for search, insert, minimum, maximum, successor, and predecessor operations will have a time complexity of O(log n).",Mistral
+Nomic-Embed,Chroma,500,50,35.362486791000265,0.14862632751464844," An AVL (Adelson-Velsky and Landis) tree is a self-balancing binary search tree that was invented by Geores Adelson-Malls and Eugene Landis in 1975. It is named after their initials. The main feature of an AVL tree is that it maintains the height balance factor, ensuring that the difference between heights of two child nodes on any given node is always either -1, 0 or +1. This property ensures that the tree remains approximately balanced and search operations (insertion, deletion, etc.) can be done in O(log n) time complexity on average.",Mistral
+MiniLM,Chroma,100,500,62.118800750000446,5.528914451599121," In Java, a HashMap can be created in several ways:
+
+1. Using the HashMap constructor, which takes an initial capacity and load factor as parameters. For example:
+
+```java
+HashMap<String, Integer> myHashMap = new HashMap<String, Integer>(10, 0.75f);
+```
+
+2. Creating an empty HashMap without any initial capacity or load factor:
+
+```java
+HashMap<String, Integer> myHashMap = new HashMap<>();
+```
+
+3. Putting key-value pairs into an existing HashMap:
+
+```java
+HashMap<String, Integer> myHashMap = new HashMap<>();
+myHashMap.put(""Key1"", 1);
+myHashMap.put(""Key2"", 2);
+// ... continue adding more key-value pairs as needed
+```
+
+4. Initializing a HashMap with a collection of key-value pairs:
+
+```java
+Map<String, Integer> map = new HashMap<>(Arrays.asList(new AbstractMap.SimpleEntry<>(""Key1"", 1), new AbstractMap.SimpleEntry<>(""Key2"", 2)));
+HashMap<String, Integer> myHashMap = (HashMap<String, Integer>) map;
+```",Mistral
+MiniLM,Chroma,100,50,65.23644066700035,5.529722213745117,"Sure! I'd be happy to help you create a hash map. There are several ways to create a hash map, but one common way is to use a `Map` object in Java. Here's an example of how you could do this:
+```
+// Create an empty Map object
+Map<String, Integer> map = new HashMap<>();
+
+// Add some key-value pairs to the map
+map.put(""apple"", 1);
+map.put(""banana"", 2);
+map.put(""orange"", 3);
+
+// Access the values in the map using the keys
+int valueOfApple = map.get(""apple""); // returns 1
+int valueOfBanana = map.get(""banana""); // returns 2
+int valueOfOrange = map.get(""orange""); // returns 3
+```
+I hope this helps! Let me know if you have any questions or need further clarification.",Llama
+MiniLM,Chroma,100,0,44.717880250000235,5.5302581787109375,"Based on the provided context, I can tell you that Professor Fontenot's office hours are not available. The context does not provide any information about Professor Fontenot's office hours, so I cannot accurately answer the query. Therefore, I would say ""I don't know"" as the most accurate response.",Llama
