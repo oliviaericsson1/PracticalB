@@ -1,5 +1,7 @@
 import redis_ingest
 import redis_search
+import chroma_ingest
+import chroma_search
 import time
 import tracemalloc
 import os
@@ -11,7 +13,7 @@ import random
 # Embedding Models
 embedding_models = {
     "MiniLM": "all-MiniLM-L6-v2",
-    "InstructorXL": "hkunlp/instructor-xl",
+    # "InstructorXL": "hkunlp/instructor-xl",
     "Nomic-Embed": "nomic-embed-text"
 
 }
@@ -60,6 +62,7 @@ sampled_combos = random.sample(possible_combinations, 4)
 
 
 # Redis For Loop
+'''
 redis_results = []
 for embedding_name, embedding_model, llm_name, llm, size, overlap, query in sampled_combos:
     if embedding_name == "Nomic-Embed":
@@ -75,14 +78,33 @@ for embedding_name, embedding_model, llm_name, llm, size, overlap, query in samp
         embedding_name, "Redis", size, overlap, query_time, query_memory, response, llm_name
     ])
 
-df = pd.DataFrame(redis_results, columns=[
+df_redis = pd.DataFrame(redis_results, columns=[
     'embedding_model', 'Vector_DB', 'chunk_size', 'chunk_overlap',
     'query_time', 'query_memory', 'response', 'llm'])
 
 
-df.to_csv(csv_path, mode='a', index=False, header=not os.path.exists(csv_path))
+df_redis.to_csv(csv_path, mode='a', index=False, header=not os.path.exists(csv_path))'
+'''
 
-chromadb_results = []
+chroma_results = []
+for embedding_name, embedding_model, llm_name, llm, size, overlap, query in sampled_combos:
+    if embedding_name == "Nomic-Embed":
+        query_time, query_memory, response = measure_time_and_memory(
+            query, chroma_ingest, chroma_search, embedding_model, llm, size, overlap, True
+        )
+    else: 
+        query_time, query_memory, response = measure_time_and_memory(
+            query, chroma_ingest, chroma_search, embedding_model, llm, size, overlap, False
+        )
+
+    chroma_results.append([
+        embedding_name, "Chroma", size, overlap, query_time, query_memory, response, llm_name
+    ])
+
+df_chroma = pd.DataFrame(chroma_results, columns=[
+    'embedding_model', 'Vector_DB', 'chunk_size', 'chunk_overlap',
+    'query_time', 'query_memory', 'response', 'llm'])
+
+df_chroma.to_csv(csv_path, mode='a', index=False, header=not os.path.exists(csv_path))
 
 
-pinecone_results = []
