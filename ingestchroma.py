@@ -1,95 +1,105 @@
-import ollama
-import chromadb
-import numpy as np
 import os
-import fitz
+import fitz  # PyMuPDF
+import numpy as np
+import chromadb
+from chromadb import HttpClient
+from sentence_transformers import SentenceTransformer
+import ollama
+import uuid
 
-# Initialize ChromaDB client
-chroma_client = chromadb.PersistentClient(path="chromadb_data")
-collection = chroma_client.get_or_create_collection(name="embedding_index")
+# Connect to ChromaDB running in Docker
+chroma_client = HttpClient(host="localhost", port=8000)
+COLLECTION_NAME = "embedding_collection"
+VECTOR_DIM = 768  
 
-VECTOR_DIM = 768
+collection = None
 
-# Clear ChromaDB collection
-def clear_chromadb_store():
-    print("Clearing existing ChromaDB store...")
-    all_ids = collection.get()["ids"]
-    if all_ids:
-        collection.delete(ids=all_ids)
-        print("ChromaDB store cleared.")
+def clear_chroma_store():
+    global collection
+    print("Clearing ChromaDB store...")
+    try:
+        chroma_client.delete_collection(name=COLLECTION_NAME)
+    except Exception:
+        print("Collection does not exist yet.")
+    collection = chroma_client.create_collection(name=COLLECTION_NAME)
+    print("ChromaDB store ready.\n")
+
+
+def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
+    if use_llama:
+        response = ollama.embeddings(model=model, prompt=text)
+        return response["embedding"]
     else:
-        print("No documents found in ChromaDB.")
+        sentence_transformer = SentenceTransformer(model)
+        return sentence_transformer.encode(text).tolist()
 
-# Generate an embedding using Ollama
-def get_embedding(text: str, model: str = "nomic-embed-text") -> list:
-    response = ollama.embeddings(model=model, prompt=text)
-    return response["embedding"]
 
-# Store embedding in ChromaDB
-def store_embedding(file: str, page: str, chunk: str, embedding: list):
-    doc_id = f"{file}_page_{page}_chunk_{hash(chunk)}"
-    collection.add(
-        ids=[doc_id],
-        embeddings=[embedding],
-        metadatas=[{"file": file, "page": page, "chunk": chunk}]
-    )
-    print(f"Stored embedding for: {chunk[:30]}...")
-
-# Extract text from a PDF by page
 def extract_text_from_pdf(pdf_path):
-    """Extract text from a PDF file."""
     doc = fitz.open(pdf_path)
     text_by_page = []
     for page_num, page in enumerate(doc):
         text_by_page.append((page_num, page.get_text()))
     return text_by_page
 
-# Split text into chunks with overlap
+
 def split_text_into_chunks(text, chunk_size=300, overlap=50):
-    """Split text into chunks of approximately chunk_size words with overlap."""
     words = text.split()
     chunks = []
     for i in range(0, len(words), chunk_size - overlap):
-        chunk = " ".join(words[i : i + chunk_size])
+        chunk = " ".join(words[i:i + chunk_size])
         chunks.append(chunk)
     return chunks
 
-# Process all PDF files in a given directory
-def process_pdfs(data_dir):
+
+def process_pdfs(data_dir, model, use_llama=False, chunk_size=300, overlap=50):
+    global collection
+
     for file_name in os.listdir(data_dir):
         if file_name.endswith(".pdf"):
             pdf_path = os.path.join(data_dir, file_name)
             text_by_page = extract_text_from_pdf(pdf_path)
             for page_num, text in text_by_page:
-                chunks = split_text_into_chunks(text)
+                chunks = split_text_into_chunks(text, chunk_size, overlap)
                 for chunk_index, chunk in enumerate(chunks):
-                    embedding = get_embedding(chunk)
-                    store_embedding(
-                        file=file_name,
-                        page=str(page_num),
-                        chunk=chunk,
-                        embedding=embedding,
+                    embedding = get_embedding(chunk, model, use_llama)
+                    unique_id = str(uuid.uuid4())
+                    metadata = {
+                        "file": file_name,
+                        "page": str(page_num),
+                        "chunk_index": str(chunk_index)
+                    }
+                    collection.add(
+                        ids=[unique_id],
+                        documents=[chunk],
+                        embeddings=[embedding],
+                        metadatas=[metadata]
                     )
-            print(f" -----> Processed {file_name}")
+                    print(f"Stored: {file_name} - page {page_num} - chunk {chunk_index}")
+            print(f" -----> Done processing {file_name}\n")
 
-# Query ChromaDB for similar embeddings
-def query_chromadb(query_text: str, top_k=5):
-    embedding = get_embedding(query_text)
+
+def query_chroma(query_text: str, model: str, use_llama: bool = False, top_k=5):
+    global collection
+    embedding = get_embedding(query_text, model, use_llama)
     results = collection.query(query_embeddings=[embedding], n_results=top_k)
-    
-    for doc in results["ids"][0]:
-        print(f"Document ID: {doc}")
-    
-    print("\nQuery results:")
-    for i, metadata in enumerate(results["metadatas"][0]):
-        print(f"{i+1}. File: {metadata['file']}, Page: {metadata['page']}, Chunk: {metadata['chunk'][:30]}...")
 
-# Main function
+    print(f"\n Top {top_k} results for: '{query_text}'\n")
+    for doc, score, meta in zip(results['documents'][0], results['distances'][0], results['metadatas'][0]):
+        print(f"[{meta['file']} | Page {meta['page']} | Chunk {meta['chunk_index']}]")
+        print(f"Distance: {score:.4f}")
+        print(f"Text: {doc[:200]}...\n")
+
+
+def run_ingest(chunk_size=300, chunk_overlap=50, model="nomic-embed-text", use_llama=True):
+    clear_chroma_store()
+    process_pdfs("../data/", model, use_llama, chunk_size, chunk_overlap)
+    print("\n Done ingesting all PDFs.\n")
+    query_chroma("What is the capital of France?", model, use_llama)
+
+
 def main():
-    clear_chromadb_store()
-    process_pdfs("../data/")
-    print("\n---Done processing PDFs---\n")
-    query_chromadb("What is the capital of France?")
+    run_ingest()
+
 
 if __name__ == "__main__":
     main()
