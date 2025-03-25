@@ -1,30 +1,22 @@
-import redis
-import chromadb
-from sentence_transformers import SentenceTransformer
-from qdrant_client import QdrantClient
-import ingest
-import search
+import redis_ingest
+import redis_search
 import time
 import tracemalloc
 import os
-import uuid
 import pandas as pd
-import platform
-from tqdm import tqdm
+import random
+
+
 
 # Embedding Models
 embedding_models = {
     "MiniLM": "all-MiniLM-L6-v2",
-    "MPNet": "all-mpnet-base-v2",
-    "InstructorXL": "hkunlp/instructor-xl"
+    "InstructorXL": "hkunlp/instructor-xl",
+    "Nomic-Embed": "nomic-embed-text"
+
 }
 
 llms = {"Mistral": "mistral:latest", "Llama": "llama2:7b"}
-
-
-
-# Vector DBs
-vector_dbs = {"qdrant": QdrantClient(path="./qdrant_db"), "redis": redis.Redis(host="localhost", port=6379, db=0) , "chroma": chromadb.PersistentClient(path="./chroma_db")}
 
 chunk_sizes = [200, 500, 1000]
 chunk_overlaps = [0, 50, 100]
@@ -33,13 +25,16 @@ test_queries = ["What is an AVL tree?", "When are Professor Fontenot's Office Ho
 csv_path = "./test_data.csv" 
 
 
-def measure_time_and_memory(test_query, embed_model, llm):
+
+
+def measure_time_and_memory(test_query, ingest_file, search_file, embed_model, llm, chunk_size, chunk_overlap, use_llama):
+
+    ingest_file.run_ingest(chunk_size, chunk_overlap, embed_model, use_llama)
+
     tracemalloc.start() 
     start_time = time.perf_counter()
 
-    context_results = search.search_embeddings(test_query, embed_model)
-
-    response = search.generate_rag_response(test_query, llm, context_results)
+    response = search_file.run_search(test_query, embed_model, use_llama, llm)
 
     end_time = time.perf_counter()
     current, peak = tracemalloc.get_traced_memory() 
@@ -47,29 +42,47 @@ def measure_time_and_memory(test_query, embed_model, llm):
 
     execution_time = end_time - start_time
     memory_used = peak / (1024 * 1024) 
-
+    
+    print(execution_time, memory_used, response)
     return execution_time, memory_used, response
 
 
-def create_test_results():
-    results = []
-    total_combinations = len(llms) * len(embedding_models) * len(vector_dbs) * len(chunk_sizes) * len(test_queries) * len(chunk_overlaps)
-    with tqdm(total=total_combinations, desc="Processing Combos") as pbar:
-        for llm_name, llm in llms.items(): 
-            for model_name, embed_model in embedding_models.items():
-                for db_name, db_client in vector_dbs.items():
-                    for size in chunk_sizes:
-                        for query in test_queries:
-                            for overlap in chunk_overlaps: 
-                                query_time, query_memory, response = measure_time_and_memory(query, embed_model, llm)
-                                results.append([model_name, db_name, size, overlap, query_time, query_memory, response, llm_name])
-                                pbar.update(1)
-    df = pd.DataFrame(results, columns=[
-        'embedding_model', 'vector_db', 'chunk_size', 'chunk_overlap',
-        'query_time', 'query_memory', 'response', 'llm'
+# Sampling Combos
+possible_combinations = []
+for embedding_name, embedding_model in embedding_models.items():
+    for llm_name, llm in llms.items():
+        for size in chunk_sizes:
+            for overlap in chunk_overlaps:
+                for query in test_queries:
+                    possible_combinations.append((embedding_name, embedding_model, llm_name, llm, size, overlap, query))
+
+sampled_combos = random.sample(possible_combinations, 4)
+
+
+# Redis For Loop
+redis_results = []
+for embedding_name, embedding_model, llm_name, llm, size, overlap, query in sampled_combos:
+    if embedding_name == "Nomic-Embed":
+        query_time, query_memory, response = measure_time_and_memory(
+            query, redis_ingest, redis_search, embedding_model, llm, size, overlap, True
+        )
+    else: 
+        query_time, query_memory, response = measure_time_and_memory(
+            query, redis_ingest, redis_search, embedding_model, llm, size, overlap, False
+        )
+
+    redis_results.append([
+        embedding_name, "Redis", size, overlap, query_time, query_memory, response, llm_name
     ])
 
-    df.to_csv(csv_path, index=False)
+df = pd.DataFrame(redis_results, columns=[
+    'embedding_model', 'Vector_DB', 'chunk_size', 'chunk_overlap',
+    'query_time', 'query_memory', 'response', 'llm'])
 
 
-create_test_results()
+df.to_csv(csv_path, mode='a', index=False, header=not os.path.exists(csv_path))
+
+chromadb_results = []
+
+
+pinecone_results = []
