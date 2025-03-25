@@ -10,7 +10,7 @@ from redis.commands.search.field import VectorField, TextField
 # Initialize models
 # embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 redis_client = redis.StrictRedis(host="localhost", port=6379, decode_responses=True)
-VECTOR_DIM = 384
+VECTOR_DIM = 784
 INDEX_NAME = "embedding_index"
 DOC_PREFIX = "doc:"
 DISTANCE_METRIC = "COSINE"
@@ -31,9 +31,9 @@ def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
 
 
 
-def search_embeddings(query, model, top_k=3):
+def search_embeddings(query, model, use_llama = False, top_k=3):
 
-    query_embedding = get_embedding(query, model)
+    query_embedding = get_embedding(query, model, use_llama)
 
     # Convert embedding to bytes for Redis search
     query_vector = np.array(query_embedding, dtype=np.float32).tobytes()
@@ -133,30 +133,11 @@ def interactive_search():
         print(response)
 
 
-# def store_embedding(file, page, chunk, embedding):
-#     """
-#     Store an embedding in Redis using a hash with vector field.
-
-#     Args:
-#         file (str): Source file name
-#         page (str): Page number
-#         chunk (str): Chunk index
-#         embedding (list): Embedding vector
-#     """
-#     key = f"{file}_page_{page}_chunk_{chunk}"
-#     redis_client.hset(
-#         key,
-#         mapping={
-#             "embedding": np.array(embedding, dtype=np.float32).tobytes(),
-#             "file": file,
-#             "page": page,
-#             "chunk": chunk,
-#         },
-#     )
-
+def run_search(query, embedding_model,use_llama=False, llm_model="llama2:7b"):
+     context_results = search_embeddings(query, embedding_model, use_llama)
+     response = generate_rag_response(query, llm_model, context_results)
+     return response
 
 if __name__ == "__main__":
     print("Running search")
     interactive_search()
-
-
