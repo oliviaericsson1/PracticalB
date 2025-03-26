@@ -1,7 +1,7 @@
-
-MPNet,Mistral,200,50,What is an AVL tree?,78.36338395899999,10.268044416999999,13.733891487121582,"According to the context, an AVL tree is a binary search tree where all nodes have the AVL property, which means that the heights of its left and right subtrees differ by no more than 1. In other words, it's a type of binary search tree where we tolerate a certain amount of imbalance in order to potentially achieve better performance when maintaining the balance."
-Nomic-Embed,Mistral,200,50,What is an AVL tree?,60.07025004100001,6.183667333000017,0.7276983261108398,"An AVL tree is a binary search tree in which all nodes have the AVL property, meaning that after every operation (insertion or removal of a key), every node in the tree must meet the balance condition. This requires periodic restructureing of the tree to detect and correct imbalance whenever it happens."
-MiniLM,Mistral,200,100,How do you create a hash map?,150.30287249999998,30.87501924999998,6.67695426940918,"Based on the context, to create a hash map for the given problem, we will use the following steps:
+embedding_model,llm,chunk_size,chunk_overlap,,query_time,vector_db,query_memory,response
+MPNet,Mistral,200,50,What is an AVL tree?,78.36338395900000,pinecone,13.733891487121600,"According to the context, an AVL tree is a binary search tree where all nodes have the AVL property, which means that the heights of its left and right subtrees differ by no more than 1. In other words, it's a type of binary search tree where we tolerate a certain amount of imbalance in order to potentially achieve better performance when maintaining the balance."
+Nomic-Embed,Mistral,200,50,What is an AVL tree?,60.07025004100000,pinecone,0.7276983261108400,"An AVL tree is a binary search tree in which all nodes have the AVL property, meaning that after every operation (insertion or removal of a key), every node in the tree must meet the balance condition. This requires periodic restructureing of the tree to detect and correct imbalance whenever it happens."
+MiniLM,Mistral,200,100,How do you create a hash map?,150.30287250000000,pinecone,6.67695426940918,"Based on the context, to create a hash map for the given problem, we will use the following steps:
 
 1. Initialize an empty list of size 10, where each index represents a slot in the hash table.
 
@@ -69,4 +69,4 @@ print(hash_map.hget('A'))  # prints: value1
 ```
 
 Note that this is a simplified implementation and may not cover all edge cases."
-MiniLM,Mistral,1000,50,When are Professor Fontenot's Office Hours,35.51034812500001,6.235533832999977,0.21565532684326172,"Professor Fontenot's office hours are from Monday (M) and Thursday (Th) from 1:30 pm to 3:00 pm. However, if those times don't work for you, he can be reached on Slack to set up an alternate time."
+MiniLM,Mistral,1000,50,When are Professor Fontenot's Office Hours,35.51034812500000,pinecone,0.21565532684326200,"Professor Fontenot's office hours are from Monday (M) and Thursday (Th) from 1:30 pm to 3:00 pm. However, if those times don't work for you, he can be reached on Slack to set up an alternate time."
