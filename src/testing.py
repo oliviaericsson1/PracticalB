@@ -13,7 +13,7 @@ import random
 # Embedding Models
 embedding_models = {
     "MiniLM": "all-MiniLM-L6-v2",
-    # "InstructorXL": "hkunlp/instructor-xl",
+    "Granite": "granite-embedding",
     "Nomic-Embed": "nomic-embed-text"
 
 }
@@ -86,6 +86,7 @@ df_redis = pd.DataFrame(redis_results, columns=[
 df_redis.to_csv(csv_path, mode='a', index=False, header=not os.path.exists(csv_path))'
 '''
 
+'''
 chroma_results = []
 for embedding_name, embedding_model, llm_name, llm, size, overlap, query in sampled_combos:
     if embedding_name == "Nomic-Embed":
@@ -106,5 +107,18 @@ df_chroma = pd.DataFrame(chroma_results, columns=[
     'query_time', 'query_memory', 'response', 'llm'])
 
 df_chroma.to_csv(csv_path, mode='a', index=False, header=not os.path.exists(csv_path))
+'''
+
+added_results = []
+
+query_time, query_memory, response = measure_time_and_memory("How do you create a hash map?", redis_ingest, redis_search, "granite-embedding", "mistral-latest", 200, 0, True)
+
+added_results.append([
+        "Granite", "Redis", 200, 0, query_time, query_memory, response, "Llama"
+    ])
+df_chroma_add = pd.DataFrame(added_results, columns=[
+    'embedding_model', 'Vector_DB', 'chunk_size', 'chunk_overlap',
+    'query_time', 'query_memory', 'response', 'llm'])
 
 
+df_chroma_add.to_csv(csv_path, mode='a', index=False, header=not os.path.exists(csv_path))
