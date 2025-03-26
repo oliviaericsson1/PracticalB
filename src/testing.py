@@ -116,9 +116,9 @@ query_time, query_memory, response = measure_time_and_memory("How do you create 
 added_results.append([
         "Granite", "Redis", 200, 0, query_time, query_memory, response, "Llama"
     ])
-df_chroma_add = pd.DataFrame(added_results, columns=[
+df_add = pd.DataFrame(added_results, columns=[
     'embedding_model', 'Vector_DB', 'chunk_size', 'chunk_overlap',
     'query_time', 'query_memory', 'response', 'llm'])
 
 
-df_chroma_add.to_csv(csv_path, mode='a', index=False, header=not os.path.exists(csv_path))
+df_add.to_csv(csv_path, mode='a', index=False, header=not os.path.exists(csv_path))
