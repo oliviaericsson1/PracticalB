@@ -111,7 +111,7 @@ df_chroma.to_csv(csv_path, mode='a', index=False, header=not os.path.exists(csv_
 
 added_results = []
 
-query_time, query_memory, response = measure_time_and_memory("How do you create a hash map?", redis_ingest, redis_search, "granite-embedding", "mistral-latest", 200, 0, True)
+query_time, query_memory, response = measure_time_and_memory("How do you create a hash map?", redis_ingest, redis_search, "granite-embedding", "mistral:latest", 200, 0, True)
 
 added_results.append([
         "Granite", "Redis", 200, 0, query_time, query_memory, response, "Llama"
