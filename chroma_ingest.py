@@ -1,5 +1,5 @@
 import os
-import fitz  # PyMuPDF
+import fitz 
 import numpy as np
 import chromadb
 from chromadb import HttpClient
