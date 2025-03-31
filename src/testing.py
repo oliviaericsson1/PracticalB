@@ -6,6 +6,8 @@ import time
 import tracemalloc
 import os
 import pandas as pd
+import pinecone_ingest
+import pinecone_search
 import random
 
 
@@ -109,6 +111,31 @@ df_chroma = pd.DataFrame(chroma_results, columns=[
 df_chroma.to_csv(csv_path, mode='a', index=False, header=not os.path.exists(csv_path))
 '''
 
+
+pinecone_results = []
+for embedding_name, embedding_model, llm_name, llm, size, overlap, query in sampled_combos:
+    if embedding_name == "Nomic-Embed":
+        query_time, query_memory, response = measure_time_and_memory(
+            query, pinecone_ingest, pinecone_search, embedding_model, llm, size, overlap, True
+        )
+    else: 
+        query_time, query_memory, response = measure_time_and_memory(
+            query, pinecone_ingest, pinecone_search, embedding_model, llm, size, overlap, False
+        )
+
+    pinecone_results.append([
+        embedding_name, "Chroma", size, overlap, query_time, query_memory, response, llm_name
+    ])
+
+df_chroma = pd.DataFrame(pinecone_ingest, columns=[
+    'embedding_model', 'Vector_DB', 'chunk_size', 'chunk_overlap',
+    'query_time', 'query_memory', 'response', 'llm'])
+
+df_chroma.to_csv(csv_path, mode='a', index=False, header=not os.path.exists(csv_path))
+
+
+
+'''
 added_results = []
 
 query_time, query_memory, response = measure_time_and_memory("How do you create a hash map?", redis_ingest, redis_search, "granite-embedding", "mistral:latest", 200, 0, True)
@@ -121,4 +148,5 @@ df_add = pd.DataFrame(added_results, columns=[
     'query_time', 'query_memory', 'response', 'llm'])
 
 
-df_add.to_csv(csv_path, mode='a', index=False, header=not os.path.exists(csv_path))
+df_add.to_csv(csv_path, mode='a', index=False, header=not os.path.exists(csv_path))'
+'''
