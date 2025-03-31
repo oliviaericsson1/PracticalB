@@ -77,22 +77,17 @@ Answer:"""
     return response["message"]["content"]
 
 
-def interactive_search():
-    """Interactive RAG loop"""
-    print("🔍 RAG Search Interface (Pinecone)")
+def interactive_search(embedding_model="nomic-embed-text", llm_model="llama3.2:latest", use_llama=True):
+    print("🔍 Pinecone RAG Search Interface")
     print("Type 'exit' to quit")
 
     while True:
         query = input("\nEnter your search query: ")
-
         if query.lower() == "exit":
             break
 
-        
-        context_results = search_embeddings(query, "all-MiniLM-L6-v2", use_llama=False)
-
-        # Generate LLM response
-        response = generate_rag_response(query, "llama3.2:latest", context_results)
+        context_results = search_embeddings(query, embedding_model, use_llama)
+        response = generate_rag_response(query, llm_model, context_results)
 
         print("\n--- Response ---")
         print(response)
