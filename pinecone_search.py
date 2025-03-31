@@ -5,7 +5,7 @@ from pinecone import Pinecone
 from pineconetest import get_embedding, INDEX_NAME
 
 # Pinecone setup
-PINECONE_API_KEY = "...enter API key..."
+PINECONE_API_KEY = "pcsk_54uT6j_TxDRZUd3qDQEPYdWaNw3PWhd3xWfWohQaXJVJWjmm8Nbxsys5DLXNYHb3W6hNL5"
 VECTOR_DIM = 768
 pc = Pinecone(api_key=PINECONE_API_KEY)
 index = pc.Index(INDEX_NAME)
