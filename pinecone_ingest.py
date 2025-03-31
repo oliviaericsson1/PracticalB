@@ -7,7 +7,7 @@ from sentence_transformers import SentenceTransformer
 from pinecone import Pinecone, ServerlessSpec
 
 # Configuration
-PINECONE_API_KEY = "pcsk_54uT6j_TxDRZUd3qDQEPYdWaNw3PWhd3xWfWohQaXJVJWjmm8Nbxsys5DLXNYHb3W6hNL5"
+PINECONE_API_KEY = "...enter API key..."
 INDEX_NAME = "embedding-index"
 VECTOR_DIM = 768
 DATA_DIR = "../data"
