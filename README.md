@@ -3,9 +3,13 @@ DS 4300 - Spring 2025 Practical 02: Local Retrieval-Augmented Generation System 
 This project involves building a local Retrieval-Augmented Generation (RAG) system for querying course notes from our Spring 2025 DS4300 class. The system ingests a collection of documents that contain the material from our class, indexes them using embedding models and vector databases, and then answers user queries by generating responses using a locally running LLM.
 
 The following tools and techniques were used to implement this system:
+
 Python for building the pipeline
+
 Ollama and Mistral for running local LLMs
+
 Vector Databases: Redis Vector DB, Chroma, and Pinecone
+
 Embedding Models: Sentence Transformers, nomic-embed, and other models
 
 Team Members:
