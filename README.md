@@ -14,23 +14,6 @@ Julian Getsey
 Olivia Ericsson
 Augusta Crow
 
-Project Structure
-The project is organized into the following key files and directories:
-/project-root
-├── /redis_search.py           # File for searching Redis Vector DB
-├── /chroma_search.py          # File for searching Chroma Vector DB
-├── /pinecone_search.py        # File for searching Pinecone Vector DB
-├── /redis_ingest.py           # File for ingesting documents into Redis Vector DB
-├── /chroma_ingest.py          # File for ingesting documents into Chroma Vector DB
-├── /pinecone_ingest.py        # File for ingesting documents into Pinecone Vector DB
-├── /pinecone_class.py   # File for containing class for ingesting and searching using Pinecone
-├── /data/                     # Directory containing all the documents from the class
-│   └── /class_notes.pdf       # PDFs that contain the information from class
-├── /testing/                  # Directory containing test files
-│   └── /testing.py      # File that conducts performance tests on different combinations
-│   └── /test_data.csv      # CSV file with test results and performance metrics
-├── /README.md                 # This README file
-
 Key Files
 /redis_ingest.py, /chroma_ingest.py, /pinecone_ingest.py
  These files handle the ingestion of documents into the respective vector databases. They index the documents by extracting embeddings and storing them in the vector database for efficient querying.
