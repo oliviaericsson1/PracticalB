@@ -1,71 +1,74 @@
-DS 4300 - Spring 2025 
-Practical 02
+DS 4300 - Spring 2025 Practical 02: Local Retrieval-Augmented Generation System Overview
 
-Due: 
-Project needs to be functional for Exam on March 24.
-Final deliverable and repo to be submitted by March 26 @ 11:59pm. 
+This project involves building a local Retrieval-Augmented Generation (RAG) system for querying course notes from our Spring 2025 DS4300 class. The system ingests a collection of documents that contain the material from our class, indexes them using embedding models and vector databases, and then answers user queries by generating responses using a locally running LLM.
 
-Overview:
-
-In this project, you and your team will build a local Retrieval-Augmented Generation system that allows a user to query the collective DS4300 notes from members of your team.  Your system will do the following:
-
-Ingest a collection of documents that represent material, such as course notes, you and your team have collected throughout the semester. 
-Index those documents using embedding and a vector database
-Accept a query from the user. 
-Retrieve relevant context based on the user’s query
-Package the relevant context up into a prompt that is passed to a locally-running LLM to generate a response. 
-
-In this, you’ll experiment with different variables - chunking strategies, embedding models, some prompt engineering, local LLM, and vector database options.  You’ll analyze how these changes affect the system’s performance and output quality. 
-
-Teams and Corpus:
-
-Each team should be composed of 2 - 4 members.  They can be the same as Practical 01, but teams may switch up. 
-
-Each team should gather a collection of course notes taken by the team members.  This can be the slide decks, personal notes taken throughout, and additional documentation for the tools/systems we have used.  
-
-Tools:
-
+The following tools and techniques were used to implement this system:
 Python for building the pipeline
-Ollama for running LLMs locally (you’ll compare and contrast at least 2 different models
-Vector Databases (Redis Vector DB, Chroma, and one other of your choosing)
-Embedding Models (you’ll compare and contrast at least 3 different options)  
+Ollama and Mistral for running local LLMs
+Vector Databases: Redis Vector DB, Chroma, and Pinecone
+Embedding Models: Sentence Transformers, nomic-embed, and other models
 
-Variables to Explore:
+Team Members:
+Sofia Zorich
+Julian Getsey
+Olivia Ericsson
+Augusta Crow
 
-Text preprocessing & chunking 
-Try various size chunks: 200, 500, 1000 tokens, for example
-Try different chunk overlap sizes: 0, 50, 100 token overlap for example
-Try various basic text prep strategies such as removing whitespace, punctuation, and any other “noise”. 
-Embedding Models - Choose 3 to compare and contrast. Examples include: 
-sentence-transformers/all-MiniLM-L6-v2
-sentence-transformers/all-mpnet-base-v2
-InstructorXL
-The model we used in class
-Measure interesting properties of using the various embedding models such as speed, memory usage, and retrieval quality (qualitative). 
-Vector Database - At a minimum, compare and contrast Redis Vector DB and Chroma (you’ll have to do a little research on this db) and one other vector database you choose based on research.  Examine the speed of indexing and querying as well as the memory usage. 
-Tweaks to the System prompt. Use the one from the class example as a starting point. 
-Try at least 2 different local LLMs.  Examples include Llama 2 7B and Mistral 7B.  You aren’t required to use these two specifically, however. 
+Project Structure
+The project is organized into the following key files and directories:
+/project-root
+├── /redis_search.py           # File for searching Redis Vector DB
+├── /chroma_search.py          # File for searching Chroma Vector DB
+├── /pinecone_search.py        # File for searching Pinecone Vector DB
+├── /redis_ingest.py           # File for ingesting documents into Redis Vector DB
+├── /chroma_ingest.py          # File for ingesting documents into Chroma Vector DB
+├── /pinecone_ingest.py        # File for ingesting documents into Pinecone Vector DB
+├── /pinecone_class.py   # File for containing class for ingesting and searching using Pinecone
+├── /data/                     # Directory containing all the documents from the class
+│   └── /class_notes.pdf       # PDFs that contain the information from class
+├── /testing/                  # Directory containing test files
+│   └── /testing.py      # File that conducts performance tests on different combinations
+│   └── /test_data.csv      # CSV file with test results and performance metrics
+├── /README.md                 # This README file
 
-Suggested Steps:
+Key Files
+/redis_ingest.py, /chroma_ingest.py, /pinecone_ingest.py
+ These files handle the ingestion of documents into the respective vector databases. They index the documents by extracting embeddings and storing them in the vector database for efficient querying.
+ 
+/redis_search.py, /chroma_search.py, /pinecone_search.py
+ These files contain functions for performing queries on the respective vector databases (Redis, Chroma, Pinecone). Each search function takes user input, retrieves relevant context from the vector database, and passes it to a locally running LLM to generate a response.
+ 
+/data/
+ This directory contains the documents (PDFs, text files, etc.) that represent the course notes, presentations, and articles. These documents are ingested into the vector databases for indexing.
+ 
+/testing/
+ This directory contains files related to the testing and evaluation of the system.
 
-Collect and clean the data.  
-If you’re using PDFs, review the output of whichever Python PDF library you’re using.  Is it what you expect? 
-Do you want to pre-process the raw text in some way before indexing?  Perhaps remove extra white space or remove stop words?
-Implement a driver Python script to execute your various versions of the indexing pipeline and to collect important data about the process (memory, time, etc).  Systematically vary the chunking strategies, embedding models, various prompt tweaks, choice of Vector DB, and choice of LLM. 
-Develop a set of user questions that you give to each pipeline and qualitatively review the responses. 
-Choose which pipeline you think works the best, and justify your choice. 
+test_results.csv contains the results of the tests, including metrics like response accuracy, query time, and system resource usage.
 
-Deliverables:
+Requirements:
+Before running the project, ensure you have the following dependencies installed:
+Python 3.8+
+Ollama (for running local LLMs)
+Redis (for Redis Vector DB, need a container in Docker to use)
+Os/fitz (for ingesting)
+Chroma (for Chroma Vector DB)
+Pinecone (for Pinecone Vector DB, need an API key from website)
+Sentence Transformers (for embedding models)
 
-As a team, you’ll produce a slide deck communicating your findings as well as your final choice of pipelines with justification. Be specific.  (Template for deck will be forthcoming.)
+How to Run the Project:
+Ingest Documents into Vector Databases
+ Choose one of the ingest_* scripts to ingest documents into the corresponding vector database. For example, to ingest documents into Redis: 
+ python ingest_redis.py
+ 
+Search in Vector Databases
+ Use one of the search_* scripts to search the vector database. For example, to search in Redis:
+ python search_redis.py
+ 
+This will return a relevant context from the indexed documents and generate a response based on the user’s query.
 
-You will also include a public GitHub repository containing well-organized set of scripts related to the various pipelines your team tests.  The README should describe how to execute your project.  
-
-More details on deliverables will be shared soon. 
-
-
-Areas for Evaluation:
-Robustness of Experimentation (30%)
-Analysis of collected data (30%)
-Recommendation of pipeline organizations (20%)
-Professionalism of Slide Deck (20%)
+Test the System
+ You can test the system by running the testing script with the test queries and checking the results:
+ python test_system.py
+ 
+This will run a set of pre-defined queries and store the results in test_results.csv. From there, you can tailor your ingest and search code in order to generate the best and quickest answers from the LLM. 
