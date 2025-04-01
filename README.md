@@ -6,7 +6,7 @@ Julian Getsey
 Olivia Ericsson
 Augusta Crow
 
-# Overview: 
+## Overview: 
 This project involves building a local Retrieval-Augmented Generation (RAG) system for querying course notes from our Spring 2025 DS4300 class. The system ingests a collection of documents that contain the material from our class, indexes them using embedding models and vector databases, and then answers user queries by generating responses using a locally running LLM. 
 
 The following tools and techniques were used to implement this system:
@@ -15,7 +15,18 @@ Ollama (llama2:7b) and Mistral (mistral:latest) for running local LLMs
 Vector Databases: Redis Vector DB, Chroma, and Pinecone
 Embedding Models: MiniLM (all-MiniLM-L6-v2), Granite (granite-embedding:latest), and Nomic Embed (nomic-embed-text)
 
+## Key Files: 
 
+#### Ingest Files
+/redis_ingest.py, /chroma_ingest.py, /pinecone_ingest.py
+
+#### Search Files
+/redis_search.py, /chroma_ingest.py, /pinecone_ingest.py
+
+#### Test/Driver Script File: 
+
+
+#### Data Being Indexed
 
 Key Files
 /redis_ingest.py, /chroma_ingest.py, /pinecone_ingest.py
