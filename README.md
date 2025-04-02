@@ -12,7 +12,7 @@ This project involves building a local Retrieval-Augmented Generation (RAG) syst
 The following tools and techniques were used to implement this system:
 Python for building the pipeline (Visual Studio Code Editor) 
 Ollama (llama2:7b) and Mistral (mistral:latest) for running local LLMs
-Vector Databases: Redis Vector DB, Chroma, and Pinecone
+Vector Databases: Redis Vector DB, ChromaDB, and Pinecone
 Embedding Models: MiniLM (all-MiniLM-L6-v2), Granite (granite-embedding:latest), and Nomic Embed (nomic-embed-text)
 
 ## Key Files: 
