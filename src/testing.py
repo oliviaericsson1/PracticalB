@@ -115,7 +115,7 @@ df_chroma = pd.DataFrame(chroma_results, columns=[
 df_chroma.to_csv(csv_path, mode='a', index=False, header=not os.path.exists(csv_path))
 '''
 
-
+# Pinecone results 
 pinecone_results = []
 for embedding_name, embedding_model, llm_name, llm, size, overlap, query in sampled_combos:
     if embedding_name == "Nomic-Embed":
