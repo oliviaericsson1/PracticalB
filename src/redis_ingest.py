@@ -77,7 +77,7 @@ def store_embedding(file: str, page: str, chunk: str, embedding: list):
 
 def extract_text_from_pdf(pdf_path):
     '''
-    Extract text from a PDF file
+    extract text from a PDF file
     '''
     doc = fitz.open(pdf_path)
     text_by_page = []
