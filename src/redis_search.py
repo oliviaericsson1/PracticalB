@@ -7,7 +7,7 @@ from redis.commands.search.query import Query
 from redis.commands.search.field import VectorField, TextField
 
 
-# Initialize models
+# initializes the model 
 # embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 redis_client = redis.StrictRedis(host="localhost", port=6379, decode_responses=True)
 VECTOR_DIM = 784
@@ -40,7 +40,6 @@ def search_embeddings(query, model, use_llama = False, top_k=3):
     Takes in a query, model, use_llama boolean, and a top_k value, 
     Searches through the collection for the top_k most similar text chunks based on the query
     '''
-
     query_embedding = get_embedding(query, model, use_llama)
 
     # Convert embedding to bytes for Redis search
@@ -91,7 +90,6 @@ def generate_rag_response(query, model, context_results):
     '''
     Interactive search experience for test-taker
     '''
-    
     # Prepare context string
     context_str = "\n".join(
         [
