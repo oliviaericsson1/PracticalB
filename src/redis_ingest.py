@@ -77,7 +77,7 @@ def store_embedding(file: str, page: str, chunk: str, embedding: list):
 
 def extract_text_from_pdf(pdf_path):
     '''
-    Extract text from a PDF file.
+    Extract text from a PDF file
     '''
     doc = fitz.open(pdf_path)
     text_by_page = []
@@ -89,7 +89,7 @@ def extract_text_from_pdf(pdf_path):
 
 def split_text_into_chunks(text, chunk_size=300, overlap=50):
     '''
-    Split text into chunks of approximately chunk_size words with overlap.
+    Split text into chunks of approximately chunk_size words with overlap
     '''
     words = text.split()
     chunks = []
