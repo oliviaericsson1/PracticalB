@@ -44,7 +44,7 @@ def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
 
 def extract_text_from_pdf(pdf_path):
     '''
-    Takes in a pdf_path and extracts the text from the pdf
+    Takes in a pdf_path and extracts the text from the pdf provided in the data folder
     '''
     doc = fitz.open(pdf_path)
     text_by_page = []
