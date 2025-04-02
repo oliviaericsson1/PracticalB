@@ -69,7 +69,7 @@ def split_text_into_chunks(text, chunk_size=300, overlap=50):
 def process_pdfs(data_dir, model, use_llama=False, chunk_size=300, overlap=50):
     '''
     Takes in a data directory, embedding model, use_llama boolean, chunk size, and overlap,
-    Processes each pdf
+    and processes each pdf
     '''
     global collection
     for file_name in os.listdir(data_dir):
