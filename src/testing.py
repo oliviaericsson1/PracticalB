@@ -33,7 +33,10 @@ csv_path = "./test_data.csv"
 
 
 def measure_time_and_memory(test_query, ingest_file, search_file, embed_model, llm, chunk_size, chunk_overlap, use_llama):
-
+    '''
+    Takes in a test_query, ingest_file, search_file, embed_model, llm, chunk_size, chunk_overlap, and use_llama boolean,
+    Measures both the time and memory required to run through both ingest and search for the specific configured combination
+    '''
     ingest_file.run_ingest(chunk_size, chunk_overlap, embed_model, use_llama)
 
     tracemalloc.start() 
