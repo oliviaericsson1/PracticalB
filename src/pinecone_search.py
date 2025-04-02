@@ -58,7 +58,6 @@ def search_embeddings(query, model, use_llama=False, top_k=3):
         print(f"Search error: {e}")
         return []
 
-
 def generate_rag_response(query, model, context_results):
     '''
     Takes in query, model, and context_results, 
