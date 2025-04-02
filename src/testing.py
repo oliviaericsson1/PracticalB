@@ -11,8 +11,6 @@ import pinecone_ingest
 import pinecone_search
 import random
 
-
-
 # represents the three different embedding models used 
 embedding_models = {
     "MiniLM": "all-MiniLM-L6-v2",
@@ -33,9 +31,6 @@ test_queries = ["What is an AVL tree?", "When are Professor Fontenot's Office Ho
 
 # initializing test csv path
 csv_path = "./test_data.csv" 
-
-
-
 
 def measure_time_and_memory(test_query, ingest_file, search_file, embed_model, llm, chunk_size, chunk_overlap, use_llama):
     '''
