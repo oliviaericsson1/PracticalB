@@ -7,7 +7,7 @@ from sentence_transformers import SentenceTransformer
 import ollama
 import uuid
 
-# Connect to ChromaDB running in Docker
+# connect to ChromaDB running in Docker
 chroma_client = HttpClient(host="localhost", port=8000)
 COLLECTION_NAME = "embedding_collection"
 VECTOR_DIM = 768  
@@ -17,7 +17,7 @@ collection = None
 
 def clear_chroma_store():
     '''
-    Clears the ChromaDB Store before Ingestion
+    Clears ChromaDB before Ingestion
     '''
     global collection
     print("Clearing ChromaDB...")
