@@ -12,7 +12,7 @@ import random
 
 
 
-# Embedding Models
+# represents the three different embedding models used 
 embedding_models = {
     "MiniLM": "all-MiniLM-L6-v2",
     "Granite": "granite-embedding",
@@ -20,6 +20,7 @@ embedding_models = {
 
 }
 
+# represents the three vector databases 
 llms = {"Mistral": "mistral:latest", "Llama": "llama2:7b"}
 
 chunk_sizes = [200, 500, 1000]
