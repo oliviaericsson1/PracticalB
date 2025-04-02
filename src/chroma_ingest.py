@@ -20,11 +20,11 @@ def clear_chroma_store():
     Clears the ChromaDB Store before Ingestion
     '''
     global collection
-    print("Clearing ChromaDB store...")
+    print("Clearing ChromaDB...")
     try:
         chroma_client.delete_collection(name=COLLECTION_NAME)
     except Exception:
-        print("Collection does not exist yet.")
+        print("collection does not exist yet.")
     collection = chroma_client.create_collection(name=COLLECTION_NAME)
     print("ChromaDB store ready.\n")
 
