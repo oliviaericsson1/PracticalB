@@ -86,7 +86,6 @@ Answer:"""
 
     return response["message"]["content"]
 
-
 def interactive_search(embedding_model="nomic-embed-text", llm_model="llama3.2:latest", use_llama=True):
     '''
     Interactive search experience for test-taker
