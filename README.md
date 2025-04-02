@@ -1,4 +1,4 @@
-o# DS 4300 - Spring 2025 Practical 02: Local Retrieval-Augmented Generation System Overview
+# DS 4300 - Spring 2025 Practical 02: Local Retrieval-Augmented Generation System Overview
 
 ## Team Members:
 Sofia Zorich
