@@ -1,7 +1,5 @@
 ## DS 4300 Example - from docs
 
-## DS 4300 Example - from docs
-
 import ollama
 import redis
 import numpy as np
@@ -61,7 +59,7 @@ def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
 
 def store_embedding(file: str, page: str, chunk: str, embedding: list):
     '''
-    store the embedding in Redis
+    Store the embedding in Redis
     '''
     key = f"{DOC_PREFIX}:{file}_page_{page}_chunk_{chunk}"
     redis_client.hset(
@@ -72,7 +70,7 @@ def store_embedding(file: str, page: str, chunk: str, embedding: list):
             "chunk": chunk,
             "embedding": np.array(
                 embedding, dtype=np.float32
-            ).tobytes(),  # Store as byte array
+            ).tobytes(),  
         },
     )
     print(f"Stored embedding for: {chunk}")
