@@ -20,6 +20,10 @@ def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
 
 
 def search_embeddings(query, model, use_llama=False, top_k=3):
+    '''
+    Takes in a query, model, use_llama boolean, and a top_k value, 
+    Searches through the collection for the top_k most similar text chunks based on the query
+    '''
     try:
         query_embedding = get_embedding(query, model, use_llama)
 
