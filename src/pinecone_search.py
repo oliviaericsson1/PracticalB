@@ -4,7 +4,7 @@ import ollama
 from pinecone import Pinecone
 from pineconetest import get_embedding, INDEX_NAME
 
-# Pinecone setup
+# Configuring API key, vector dimensions, pinecone client, and index
 PINECONE_API_KEY = "pcsk_54uT6j_TxDRZUd3qDQEPYdWaNw3PWhd3xWfWohQaXJVJWjmm8Nbxsys5DLXNYHb3W6hNL5"
 VECTOR_DIM = 768
 pc = Pinecone(api_key=PINECONE_API_KEY)
@@ -12,6 +12,10 @@ index = pc.Index(INDEX_NAME)
 
 
 def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
+    '''
+    Takes in text to embed str, embedding model str, and a use_llama boolean,
+    Returns the embedding using either a llama or Sentence transformer embedding model
+    '''
     if use_llama:
         response = ollama.embeddings(model=model, prompt=text)
         return response["embedding"]
@@ -57,6 +61,10 @@ def search_embeddings(query, model, use_llama=False, top_k=3):
 
 
 def generate_rag_response(query, model, context_results):
+    '''
+    Takes in query, model, and context_results, 
+    Provides a RAG response based on the query and prompt to the model
+    '''
     context_str = "\n".join(
         [
             f"From {r.get('file', 'Unknown')} (page {r.get('page', '?')}, chunk {r.get('chunk', '?')}): {r.get('text', '')}"
@@ -82,6 +90,9 @@ Answer:"""
 
 
 def interactive_search(embedding_model="nomic-embed-text", llm_model="llama3.2:latest", use_llama=True):
+    '''
+    Interactive search experience for test-taker
+    '''
     print("🔍 Pinecone RAG Search Interface")
     print("Type 'exit' to quit")
 
@@ -98,6 +109,10 @@ def interactive_search(embedding_model="nomic-embed-text", llm_model="llama3.2:l
 
 
 def run_search(query, embedding_model, use_llama=False, llm_model="llama3.2:latest"):
+    '''
+    Takes in chunk_size, chunk_overlap, embedding model, and use_llama boolean, and runs all necessary
+    functions in this ingest file for testing purposes
+    '''
     context_results = search_embeddings(query, embedding_model, use_llama)
     return generate_rag_response(query, llm_model, context_results)
 
