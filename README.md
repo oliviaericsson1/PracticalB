@@ -25,7 +25,7 @@ These files handle the ingestion of documents into the respective vector databas
 #### Search Files (src)
 /redis_search.py, /chroma_ingest.py, /pinecone_ingest.py
 
-These files contain functions for performing queries on the respective vector databases (Redis, Chroma, Pinecone). Each search function takes user input, retrieves relevant context from the vector database, and passes it to a locally running LLM to generate a response. Again, the search varies slightly based on the vector DB being used, but a similar process is followed in each of these files: getting and searching the embedding, generating a RAG response, and providing an interactive search experience for the user. Additionally, we've added a run_search function for testing which wraps these functions together. 
+These files contain functions for performing queries on the respective vector databases (Redis, ChromaDB, Pinecone). Each search function takes user input, retrieves relevant context from the vector database, and passes it to a locally running LLM to generate a response. Again, the search varies slightly based on the vector DB being used, but a similar process is followed in each of these files: getting and searching the embedding, generating a RAG response, and providing an interactive search experience for the user. Additionally, we've added a run_search function for testing which wraps these functions together. 
 
 #### Test Files (src) 
 /testing.py, /test_results.csv 
