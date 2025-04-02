@@ -28,7 +28,6 @@ def clear_chroma_store():
     collection = chroma_client.create_collection(name=COLLECTION_NAME)
     print("ChromaDB store ready.\n")
 
-
 def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
     '''
     Takes in text to embed str, embedding model str, and a use_llama boolean,
@@ -41,7 +40,6 @@ def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
         sentence_transformer = SentenceTransformer(model)
         return sentence_transformer.encode(text).tolist()
 
-
 def extract_text_from_pdf(pdf_path):
     '''
     Takes in a pdf_path and extracts the text from the pdf provided in the data folder
@@ -51,7 +49,6 @@ def extract_text_from_pdf(pdf_path):
     for page_num, page in enumerate(doc):
         text_by_page.append((page_num, page.get_text()))
     return text_by_page
-
 
 def split_text_into_chunks(text, chunk_size=300, overlap=50):
     '''
@@ -64,7 +61,6 @@ def split_text_into_chunks(text, chunk_size=300, overlap=50):
         chunk = " ".join(words[i:i + chunk_size])
         chunks.append(chunk)
     return chunks
-
 
 def process_pdfs(data_dir, model, use_llama=False, chunk_size=300, overlap=50):
     '''
@@ -95,7 +91,6 @@ def process_pdfs(data_dir, model, use_llama=False, chunk_size=300, overlap=50):
                     print(f"Stored: {file_name} - page {page_num} - chunk {chunk_index}")
             print(f" -----> Done processing {file_name}\n")
 
-
 def query_chroma(query_text: str, model: str, use_llama: bool = False, top_k=5):
     '''
     Takes in a query_text, embedding model, use_llama boolean, and a top_k value,
@@ -110,7 +105,6 @@ def query_chroma(query_text: str, model: str, use_llama: bool = False, top_k=5):
         print(f"[{meta['file']} | Page {meta['page']} | Chunk {meta['chunk_index']}]")
         print(f"Distance: {score:.4f}")
         print(f"Text: {doc[:200]}...\n")
-
 
 def run_ingest(chunk_size=300, chunk_overlap=50, model="nomic-embed-text", use_llama=True):
     '''
