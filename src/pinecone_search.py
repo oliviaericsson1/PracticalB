@@ -104,7 +104,6 @@ def interactive_search(embedding_model="nomic-embed-text", llm_model="llama3.2:l
         print("\n--- Response ---")
         print(response)
 
-
 def run_search(query, embedding_model, use_llama=False, llm_model="llama3.2:latest"):
     '''
     Takes in chunk_size, chunk_overlap, embedding model, and use_llama boolean, and runs all necessary
