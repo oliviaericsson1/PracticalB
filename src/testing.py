@@ -1,3 +1,4 @@
+# Necessary Imports
 import redis_ingest
 import redis_search
 import chroma_ingest
@@ -23,10 +24,14 @@ embedding_models = {
 # represents the three vector databases 
 llms = {"Mistral": "mistral:latest", "Llama": "llama2:7b"}
 
+# chunk sizes and overlaps
 chunk_sizes = [200, 500, 1000]
 chunk_overlaps = [0, 50, 100]
 
+# test queries for search testing
 test_queries = ["What is an AVL tree?", "When are Professor Fontenot's Office Hours", "How do you create a hash map?"]
+
+# initializing test csv path
 csv_path = "./test_data.csv" 
 
 
