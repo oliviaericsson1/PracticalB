@@ -11,7 +11,6 @@ VECTOR_DIM = 768
 pc = Pinecone(api_key=PINECONE_API_KEY)
 index = pc.Index(INDEX_NAME)
 
-
 def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
     '''
     Takes in text to embedding string, embedding model str, and a use_llama boolean,
@@ -22,7 +21,6 @@ def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
         return response["embedding"]
     else:
         return SentenceTransformer(model).encode(text).tolist()
-
 
 def search_embeddings(query, model, use_llama=False, top_k=3):
     '''
