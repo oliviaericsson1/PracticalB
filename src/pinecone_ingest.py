@@ -14,10 +14,15 @@ DATA_DIR = "../data"
 
 # Initialize Pinecone client
 pc = Pinecone(api_key=PINECONE_API_KEY)
+
+# Initialize index
 index = None
 
 
 def clear_pinecone_index():
+    '''
+    Clears Pinecone index before ingestion
+    '''
     global index
     print("Resetting Pinecone index...")
     existing_indexes = pc.list_indexes().names()
@@ -38,6 +43,10 @@ def clear_pinecone_index():
 
 
 def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
+     '''
+    Takes in text to embed str, embedding model str, and a use_llama boolean,
+    Returns the embedding using either a llama or Sentence transformer embedding model
+    '''
     if use_llama:
         response = ollama.embeddings(model=model, prompt=text)
         return response["embedding"]
@@ -46,11 +55,18 @@ def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
 
 
 def extract_text_from_pdf(pdf_path):
+    '''
+    Takes in a pdf_path and extracts the text from the pdf
+    '''
     doc = fitz.open(pdf_path)
     return [(i, page.get_text()) for i, page in enumerate(doc)]
 
 
 def split_text_into_chunks(text, chunk_size=300, overlap=50):
+    '''
+    Takes in the text, chunk size, and overlap,
+    Returns the splitted text depending on these inputted chunk and overlap values
+    '''
     words = text.split()
     return [
         " ".join(words[i:i + chunk_size])
@@ -59,6 +75,10 @@ def split_text_into_chunks(text, chunk_size=300, overlap=50):
 
 
 def process_pdfs(data_dir, model, use_llama=False, chunk_size=300, overlap=50):
+    '''
+    Takes in a data directory, embedding model, use_llama boolean, chunk size, and overlap,
+    Processes each pdf
+    '''
     global index
 
     for file_name in os.listdir(data_dir):
@@ -89,6 +109,10 @@ def process_pdfs(data_dir, model, use_llama=False, chunk_size=300, overlap=50):
 
 
 def run_ingest(chunk_size=300, chunk_overlap=50, model="nomic-embed-text", use_llama=True):
+    '''
+    Takes in chunk_size, chunk_overlap, embedding model, and use_llama boolean, and runs all necessary
+    functions in this ingest file for testing purposes
+    '''
     clear_pinecone_index()
     process_pdfs(DATA_DIR, model, use_llama, chunk_size, chunk_overlap)
     print("\n Done ingesting all PDFs.\n")
