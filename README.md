@@ -1,4 +1,4 @@
-# DS 4300 - Spring 2025 Practical 02: Local Retrieval-Augmented Generation System Overview
+o# DS 4300 - Spring 2025 Practical 02: Local Retrieval-Augmented Generation System Overview
 
 ## Team Members:
 Sofia Zorich
@@ -20,15 +20,17 @@ Embedding Models: MiniLM (all-MiniLM-L6-v2), Granite (granite-embedding:latest),
 #### Ingest Files (src)
 /redis_ingest.py, /chroma_ingest.py, /pinecone_ingest.py
 
- These files handle the ingestion of documents into the respective vector databases. They index the documents by extracting embeddings and storing them in the vector database for efficient querying.
+These files handle the ingestion of documents into the respective vector databases. They index the documents by extracting embeddings and storing them in the vector database for efficient querying. While ingestion varies slightly based on the vector DB being used, each of these 3 files follows a similar process: clearing the db, getting the embedding, extracting the pdf, splitting the text from the pdf into chunks, and processing the pdf. For testing purposes, we've all implemented a run_ingest function which wraps all of the previous functions. 
 
 #### Search Files (src)
 /redis_search.py, /chroma_ingest.py, /pinecone_ingest.py
 
- These files contain functions for performing queries on the respective vector databases (Redis, Chroma, Pinecone). Each search function takes user input, retrieves relevant context from the vector database, and passes it to a locally running LLM to generate a response.
+These files contain functions for performing queries on the respective vector databases (Redis, Chroma, Pinecone). Each search function takes user input, retrieves relevant context from the vector database, and passes it to a locally running LLM to generate a response. Again, the search varies slightly based on the vector DB being used, but a similar process is followed in each of these files: getting and searching the embedding, generating a RAG response, and providing an interactive search experience for the user. Additionally, we've added a run_search function for testing which wraps these functions together. 
 
 #### Test Files (src) 
 /testing.py, /test_results.csv 
+
+Our testing script first gathers our embedding models, llms, chunk sizes and overlaps, and test queries, which we'll later use to generate a random combination better suited for computational capability. Function measure_time_and_accuracy runs the ingest and search files, recording both time, memory usage, and RAG response. We then run for loops to compile a CSV file with the following information: embedding_model, Vector_DB,	chunk_size,	chunk_overlap,	query_time,	query_memory,	response,	llm. We add rows to this CSV to fill gaps where they appear (scenarios where combinations of models, chunks, etc. are missing certain test cases). 
 
 #### Data Being Indexed (data)
 /data/
