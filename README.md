@@ -30,7 +30,7 @@ These files contain functions for performing queries on the respective vector da
 #### Test Files (src) 
 /testing.py, /test_results.csv
 
-Our testing script first gathers our embedding models, llms, chunk sizes and overlaps, and test queries, which we'll later use to generate a random combination better suited for computational capability. Function measure_time_and_accuracy runs the ingest and search files, recording both time, memory usage, and RAG response. We then run for loops to compile a CSV file with the following information: embedding_model, Vector_DB,	chunk_size,	chunk_overlap,	query_time,	query_memory,	response,	llm. We add rows to this CSV to fill gaps where they appear (scenarios where combinations of models, chunks, etc. are missing certain test cases). 
+Our testing script gathers our embedding models, llms, chunk sizes and overlaps, and test queries, which we'll later use to generate a random combination better suited for computational capability. Function measure_time_and_accuracy runs the ingest and search files, recording both time, memory usage, and RAG response. We then run for loops to compile a CSV file with the following information: embedding_model, Vector_DB,	chunk_size,	chunk_overlap,	query_time,	query_memory,	response,	llm. We add rows to this CSV to fill gaps where they appear (scenarios where combinations of models, chunks, etc. are missing certain test cases). 
 
 #### Data Being Indexed (data)
 /data/
