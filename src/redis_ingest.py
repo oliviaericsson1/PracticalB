@@ -13,21 +13,25 @@ from sentence_transformers import SentenceTransformer
 # Initialize Redis connection
 redis_client = redis.Redis(host="localhost", port=6379, db=0)
 
+# Configuring vector dimensions, index_name, doc_prefix, and distance metric
 VECTOR_DIM = 784
 INDEX_NAME = "embedding_index"
 DOC_PREFIX = "doc:"
 DISTANCE_METRIC = "COSINE"
 
 
-# used to clear the redis vector store
 def clear_redis_store():
+    '''
+    Used to clear the redis vector store
+    '''
     print("Clearing existing Redis store...")
     redis_client.flushdb()
     print("Redis store cleared.")
 
-
-# Create an HNSW index in Redis
 def create_hnsw_index():
+    '''
+    Create an HNSW index in Redis
+    '''
     try:
         redis_client.execute_command(f"FT.DROPINDEX {INDEX_NAME} DD")
     except redis.exceptions.ResponseError:
@@ -42,9 +46,11 @@ def create_hnsw_index():
     )
     print("Index created successfully.")
 
-
-# Generate an embedding using nomic-embed-text
 def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
+    '''
+    Takes in text, embedding model, and use_llama boolean, 
+    Generate an embedding based on either a llama embedding model or SentenceTransformer
+    '''
     if use_llama:
         response = ollama.embeddings(model=model, prompt=text)
         return response["embedding"]
@@ -53,8 +59,10 @@ def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
         return sentence_transformer.encode(text).tolist()
 
 
-# store the embedding in Redis
 def store_embedding(file: str, page: str, chunk: str, embedding: list):
+    '''
+    store the embedding in Redis
+    '''
     key = f"{DOC_PREFIX}:{file}_page_{page}_chunk_{chunk}"
     redis_client.hset(
         key,
@@ -69,10 +77,10 @@ def store_embedding(file: str, page: str, chunk: str, embedding: list):
     )
     print(f"Stored embedding for: {chunk}")
 
-
-# extract the text from a PDF by page
 def extract_text_from_pdf(pdf_path):
-    """Extract text from a PDF file."""
+    '''
+    Extract text from a PDF file.
+    '''
     doc = fitz.open(pdf_path)
     text_by_page = []
     for page_num, page in enumerate(doc):
@@ -80,9 +88,11 @@ def extract_text_from_pdf(pdf_path):
     return text_by_page
 
 
-# split the text into chunks with overlap
+
 def split_text_into_chunks(text, chunk_size=300, overlap=50):
-    """Split text into chunks of approximately chunk_size words with overlap."""
+    '''
+    Split text into chunks of approximately chunk_size words with overlap.
+    '''
     words = text.split()
     chunks = []
     for i in range(0, len(words), chunk_size - overlap):
@@ -90,10 +100,10 @@ def split_text_into_chunks(text, chunk_size=300, overlap=50):
         chunks.append(chunk)
     return chunks
 
-
-# Process all PDF files in a given directory
 def process_pdfs(data_dir, model, use_llama=False, chunk_size=300, overlap=50):
-
+    '''
+    Process all PDF files in a given directory
+    '''
     for file_name in os.listdir(data_dir):
         if file_name.endswith(".pdf"):
             pdf_path = os.path.join(data_dir, file_name)
@@ -133,6 +143,10 @@ def query_redis(query_text: str, model, use_llama):
 
 
 def run_ingest(chunk_size, chunk_overlap, model, use_llama=False):
+    '''
+    Takes in chunk_size, chunk_overlap, embedding_model, and use_llama boolean, 
+    Runs all relevant functions in ingest file for testing purposes
+    '''
     clear_redis_store()
     create_hnsw_index()
     process_pdfs("../data/", model, use_llama, chunk_size, chunk_overlap)
