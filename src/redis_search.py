@@ -19,7 +19,6 @@ DISTANCE_METRIC = "COSINE"
 #     """Calculate cosine similarity between two vectors."""
 #     return np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
 
-
 def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
     '''
     Takes in text, embedding model, and use_llama boolean, 
@@ -32,8 +31,6 @@ def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
         sentence_transformer = SentenceTransformer(model)
         response = sentence_transformer.encode(text).tolist()
         return response
-
-
 
 def search_embeddings(query, model, use_llama = False, top_k=3):
     '''
@@ -85,7 +82,6 @@ def search_embeddings(query, model, use_llama = False, top_k=3):
         print(f"Search error: {e}")
         return []
 
-
 def generate_rag_response(query, model, context_results):
     '''
     Interactive search experience for test-taker
@@ -120,7 +116,6 @@ Answer:"""
 
     return response["message"]["content"]
 
-
 def interactive_search():
     """Interactive search interface."""
     print("🔍 RAG Search Interface")
@@ -140,7 +135,6 @@ def interactive_search():
 
         print("\n--- Response ---")
         print(response)
-
 
 def run_search(query, embedding_model,use_llama=False, llm_model="llama2:7b"):
     '''
