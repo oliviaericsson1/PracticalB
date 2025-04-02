@@ -8,10 +8,16 @@ from chromadb import HttpClient
 # Connect to ChromaDB running in Docker
 chroma_client = HttpClient(host="localhost", port=8000)
 COLLECTION_NAME = "embedding_collection"
+
+# Creating a collection 
 collection = chroma_client.get_or_create_collection(COLLECTION_NAME)
 
 
 def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
+    '''
+    Takes in text, embedding model, and use_llama boolean, 
+    Gets the vector embedding using either a llama or SentenceTransformer embedding model
+    '''
     if use_llama:
         response = ollama.embeddings(model=model, prompt=text)
         return response["embedding"]
@@ -21,6 +27,10 @@ def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
 
 
 def search_embeddings(query, model, use_llama=False, top_k=3):
+    '''
+    Takes in a query, model, use_llama boolean, and a top_k value, 
+    Searches through the collection for the top_k most similar text chunks based on the query
+    '''
     try:
         query_embedding = get_embedding(query, model, use_llama)
 
