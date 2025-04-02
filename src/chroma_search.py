@@ -111,6 +111,10 @@ def interactive_search():
 
 
 def run_search(query, embedding_model="all-MiniLM-L6-v2", use_llama=False, llm_model="llama3.2:latest"):
+    '''
+    Takes in a query, embedding_model, use_llama boolean, and llm_model, 
+    Runs all relevant functions in search for testing purposes
+    '''
     context_results = search_embeddings(query, embedding_model, use_llama)
     response = generate_rag_response(query, llm_model, context_results)
     return response
