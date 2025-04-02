@@ -4,7 +4,7 @@ import ollama
 from pinecone import Pinecone
 from pineconetest import get_embedding, INDEX_NAME
 
-# Configuring API key, vector dimensions, pinecone client, and index
+# Configuring API key, vector dimensions, Pinecone client, and index
 # to get the API key please visit Pinecone website and create an API key
 PINECONE_API_KEY = "...enter API key..."
 VECTOR_DIM = 768
