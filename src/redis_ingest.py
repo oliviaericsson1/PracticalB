@@ -8,7 +8,7 @@ import os
 import fitz
 from sentence_transformers import SentenceTransformer
 
-# Initialize Redis connection
+# initialize Redis connection
 redis_client = redis.Redis(host="localhost", port=6379, db=0)
 
 # Configuring vector dimensions, index_name, doc_prefix, and distance metric
