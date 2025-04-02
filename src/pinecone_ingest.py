@@ -6,10 +6,10 @@ import ollama
 from sentence_transformers import SentenceTransformer
 from pinecone import Pinecone, ServerlessSpec
 
-# Configuration
+# Configuring API_key, INDEX_NAME, Vector dimensions, and data directory
 PINECONE_API_KEY = "...enter API key..."
 INDEX_NAME = "embedding-index"
-VECTOR_DIM = 768
+VECTOR_DIM = 768 # Modify to 384 for MiniLM embedding model
 DATA_DIR = "../data"
 
 # Initialize Pinecone client
