@@ -21,7 +21,7 @@ index = None
 
 def clear_pinecone_index():
     '''
-    Clears Pinecone index before ingestion
+    clears Pinecone index before ingestion
     '''
     global index
     print("Resetting Pinecone index...")
