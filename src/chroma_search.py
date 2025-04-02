@@ -5,7 +5,7 @@ import ollama
 import chromadb
 from chromadb import HttpClient
 
-# Connect to ChromaDB running in Docker
+# connect to ChromaDB running in Docker
 chroma_client = HttpClient(host="localhost", port=8000)
 COLLECTION_NAME = "embedding_collection"
 
