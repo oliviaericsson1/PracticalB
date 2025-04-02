@@ -28,7 +28,7 @@ These files handle the ingestion of documents into the respective vector databas
 These files contain functions for performing queries on the respective vector databases (Redis, ChromaDB, Pinecone). Each search function takes user input, retrieves relevant context from the vector database, and passes it to a locally running LLM to generate a response. Again, the search varies slightly based on the vector DB being used, but a similar process is followed in each of these files: getting and searching the embedding, generating a RAG response, and providing an interactive search experience for the user. Additionally, we've added a run_search function for testing which wraps these functions together. 
 
 #### Test Files (src) 
-/testing.py, /test_results.csv 
+/testing.py, /test_results.csv
 
 Our testing script first gathers our embedding models, llms, chunk sizes and overlaps, and test queries, which we'll later use to generate a random combination better suited for computational capability. Function measure_time_and_accuracy runs the ingest and search files, recording both time, memory usage, and RAG response. We then run for loops to compile a CSV file with the following information: embedding_model, Vector_DB,	chunk_size,	chunk_overlap,	query_time,	query_memory,	response,	llm. We add rows to this CSV to fill gaps where they appear (scenarios where combinations of models, chunks, etc. are missing certain test cases). 
 
@@ -41,7 +41,7 @@ Our testing script first gathers our embedding models, llms, chunk sizes and ove
 Before running the project, ensure you have the following dependencies installed:
 Python 3.8+
 LLMs: Ollama and Mistral
-Vector Databases: Redis Vector DB (requires Docker Container), Chroma (requires Docker Container), Pinecone (requires API key from Pinecone website)
+Vector Databases: Redis Vector DB (requires Docker Container), ChromaDB (requires Docker Container), Pinecone (requires API key from Pinecone website)
 Embedding Models: MiniLM (from Sentence Transformers), Granite (from Ollama), Nomic-Embed (from Ollama)   
 Os/fitz (necessary during ingestion)
 Database Operations: Pandas, Numpy
