@@ -12,7 +12,7 @@ INDEX_NAME = "embedding-index"
 VECTOR_DIM = 768 # Modify to 384 for MiniLM embedding model
 DATA_DIR = "../data"
 
-# Initialize Pinecone client
+# initialize Pinecone client
 pc = Pinecone(api_key=PINECONE_API_KEY)
 
 # Initialize index
