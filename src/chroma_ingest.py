@@ -7,7 +7,7 @@ from sentence_transformers import SentenceTransformer
 import ollama
 import uuid
 
-# connect to ChromaDB running in Docker
+# Connect to ChromaDB in Docker
 chroma_client = HttpClient(host="localhost", port=8000)
 COLLECTION_NAME = "embedding_collection"
 VECTOR_DIM = 768  
