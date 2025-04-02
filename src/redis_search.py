@@ -21,6 +21,10 @@ DISTANCE_METRIC = "COSINE"
 
 
 def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
+    '''
+    Takes in text, embedding model, and use_llama boolean, 
+    Generate an embedding based on either a llama embedding model or SentenceTransformer
+    '''
     if use_llama == True:
         response = ollama.embeddings(model=model, prompt=text)
         response["embedding"]
@@ -84,7 +88,10 @@ def search_embeddings(query, model, use_llama = False, top_k=3):
 
 
 def generate_rag_response(query, model, context_results):
-
+    '''
+    Interactive search experience for test-taker
+    '''
+    
     # Prepare context string
     context_str = "\n".join(
         [
@@ -138,6 +145,10 @@ def interactive_search():
 
 
 def run_search(query, embedding_model,use_llama=False, llm_model="llama2:7b"):
+    '''
+    Takes in query, embedding_model, use_llama boolean, and llm_model, 
+    Runs all relevant function in search file for testing purposes
+    '''
      context_results = search_embeddings(query, embedding_model, use_llama)
      response = generate_rag_response(query, llm_model, context_results)
      return response
