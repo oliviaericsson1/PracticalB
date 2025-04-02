@@ -13,7 +13,7 @@ index = pc.Index(INDEX_NAME)
 
 def get_embedding(text: str, model: str, use_llama: bool = False) -> list:
     '''
-    Takes in text to embed str, embedding model str, and a use_llama boolean,
+    Takes in text to embedding string, embedding model str, and a use_llama boolean,
     Returns the embedding using either a llama or Sentence transformer embedding model
     '''
     if use_llama:
